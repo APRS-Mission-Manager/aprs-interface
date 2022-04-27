@@ -1,7 +1,7 @@
 aprs:
   server: "noam.aprs2.net"
   port: 14580
-  callsignPatterns: ['K4UAH*']
+  callsignPatterns: ['b/K4UAH*', 'r/34/-87/50']
 
 amazon:
   DBaprsLog: 
