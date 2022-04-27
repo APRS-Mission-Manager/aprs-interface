@@ -10,13 +10,17 @@ import (
 )
 
 type Hook struct {
-	conn      net.Conn
-	appConfig config.Config
+	conn         net.Conn
+	appConfig    config.Config
+	packetLogger APRSPacketLogger
 }
 
-func CreateHook(appConfig config.Config) Hook {
-	hook := Hook{appConfig: appConfig}
+type APRSPacketLogger interface {
+	LogPacket(callsign string, timestamp int, packet string)
+}
 
+func CreateHook(appConfig config.Config, packetLogger APRSPacketLogger) Hook {
+	hook := Hook{appConfig: appConfig, packetLogger: packetLogger}
 	return hook
 }
 
