@@ -1,0 +1,8 @@
+aprs:
+  server: "noam.aprs2.net"
+  port: 14580
+  callsignPatterns: ['K4UAH*']
+
+amazon:
+  DBaprsLog: 
+    name: "APRS_Data_Log"
