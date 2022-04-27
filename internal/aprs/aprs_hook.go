@@ -28,6 +28,7 @@ func CreateHook(appConfig config.Config, packetLogger APRSPacketLogger) Hook {
 func (hook Hook) Subscribe() {
 	log.Info().Msg("[APRS Hook] Initializing APRS Hook.")
 
+	// Create TCP Connection to APRS-IS server
 	serverAddress := hook.appConfig.APRS.Server + ":" + strconv.Itoa(hook.appConfig.APRS.Port)
 	conn, err := net.Dial("tcp", serverAddress)
 	if err != nil {
@@ -35,6 +36,7 @@ func (hook Hook) Subscribe() {
 	}
 	hook.conn = conn
 
+	// Connection needs to be followed by login, otherwise the server will close the connection
 	hook.login()
 	replyBuffer := make([]byte, 256)
 	for {
@@ -45,6 +47,7 @@ func (hook Hook) Subscribe() {
 
 		message := strings.Split(string(replyBuffer), "\r\n")[0]
 
+		// Non-APRS packets are prefixed by '#'
 		if message[0] == '#' {
 			hook.handleServerUpdate(message)
 		} else {
@@ -69,7 +72,9 @@ func (hook Hook) login() {
 func (hook Hook) handleAPRSPacket(packet string) {
 	log.Debug().Str("packet", packet).Msg("[APRS Hook]")
 
+	// Packets are split <callsign> '>' <rest of packet>
 	callsign := strings.Split(packet, ">")[0]
+	// Timestamp is an internal measurement of when the packet was processed
 	timestamp := time.Now().UnixMilli()
 
 	hook.packetLogger.LogAPRSPacket(callsign, timestamp, packet)

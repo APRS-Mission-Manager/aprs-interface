@@ -36,6 +36,8 @@ func setup() config.Config {
 		log.Fatal().AnErr("error", err).Msg("Unable to unmarshall config data!")
 	}
 
+	// This allows specifying APRS Login through environmental variables.
+	// This prevents having to specify the password within config files
 	cfg.APRS.Username = viper.GetString("APRS_Username")
 	cfg.APRS.Password = viper.GetString("APRS_Password")
 
@@ -52,16 +54,5 @@ func main() {
 	aprsHook := aprs.CreateHook(appConfig, amazonApi)
 	go aprsHook.Subscribe()
 
-	// helloHandler := func(w http.ResponseWriter, req *http.Request) {
-	// 	io.WriteString(w, "Hello, world!\n")
-	// }
-
-	// http.HandleFunc("/hello", helloHandler)
-	// log.Info().Msg("Listening for requests at http://localhost:8080/hello")
-
-	// err := http.ListenAndServe(":8080", nil)
-	// if err != nil {
-	// 	log.Fatal().AnErr("error", err)
-	// }
 	select {}
 }
