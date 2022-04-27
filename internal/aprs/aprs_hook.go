@@ -4,6 +4,7 @@ import (
 	"net"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/APRS-Mission-Manager/aprs-interface/internal/config"
 	"github.com/rs/zerolog/log"
@@ -16,7 +17,7 @@ type Hook struct {
 }
 
 type APRSPacketLogger interface {
-	LogPacket(callsign string, timestamp int, packet string)
+	LogAPRSPacket(callsign string, timestamp int64, packet string)
 }
 
 func CreateHook(appConfig config.Config, packetLogger APRSPacketLogger) Hook {
@@ -67,6 +68,11 @@ func (hook Hook) login() {
 
 func (hook Hook) handleAPRSPacket(packet string) {
 	log.Debug().Str("packet", packet).Msg("[APRS Hook]")
+
+	callsign := strings.Split(packet, ">")[0]
+	timestamp := time.Now().UnixMilli()
+
+	hook.packetLogger.LogAPRSPacket(callsign, timestamp, packet)
 }
 
 func (hook Hook) handleServerUpdate(update string) {

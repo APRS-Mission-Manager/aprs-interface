@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/APRS-Mission-Manager/aprs-interface/internal/amazon"
 	"github.com/APRS-Mission-Manager/aprs-interface/internal/aprs"
 	"github.com/APRS-Mission-Manager/aprs-interface/internal/config"
 	"github.com/rs/zerolog"
@@ -47,7 +48,8 @@ func setup() config.Config {
 func main() {
 	appConfig := setup()
 
-	aprsHook := aprs.CreateHook(appConfig)
+	amazonApi := amazon.CreateAPI(appConfig)
+	aprsHook := aprs.CreateHook(appConfig, amazonApi)
 	go aprsHook.Subscribe()
 
 	// helloHandler := func(w http.ResponseWriter, req *http.Request) {
