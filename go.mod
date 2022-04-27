@@ -1,4 +1,4 @@
-module github.com/APRS-Payload-Manager/aprs-interface
+module github.com/APRS-Mission-Manager/aprs-interface
 
 go 1.18
 
