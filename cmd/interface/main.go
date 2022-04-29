@@ -19,6 +19,7 @@ func setup() config.Config {
 	viper.SetConfigName("debug")
 	// Set path to find config file
 	viper.AddConfigPath("../../config")
+	viper.AddConfigPath("./config")
 	// Allow viper to read environment variables
 	viper.AutomaticEnv()
 	// Set config file type
